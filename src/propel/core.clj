@@ -78,7 +78,7 @@
   "Absolute value."
   [x]
   (if (neg? x)
-    (- x)
+    (-' x)
     x))
 
 (defn not-lazy
@@ -485,13 +485,24 @@
         errors (map (fn [correct-output output]
                       (if (= output :no-stack-item)
                         1000000
-                        (abs (- correct-output output))))
+                        (abs (-' correct-output output))))
                     correct-outputs
                     outputs)]
     (assoc individual
            :behaviors outputs
            :errors errors
            :total-error (apply +' errors))))
+
+(defn to-fizz-buzz
+  [n]
+  (cond
+    (zero? (rem n 15)) "FizzBuzz"
+    (zero? (rem n 3)) "Fizz"
+    (zero? (rem n 5)) "Buzz"
+    :else n))
+
+(def fizz-buzz-training
+  (map to-fizz-buzz (range 100)))
 
 ;;;;;;;;;
 ;; String classification
