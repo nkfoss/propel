@@ -12,18 +12,24 @@
 ; TMH: ERCs?
 (def default-instructions
   (list
-   'in1
+   'in1 ; Might want multiple copies of this as we get lots of instructions
    'integer_+
    'integer_-
    'integer_*
    'integer_%
    'integer_=
+   'integer_dup
+   'integer_depth
+   'integer_empty?
    'exec_dup
    'exec_if
    'boolean_and
    'boolean_or
    'boolean_not
    'boolean_=
+   'boolean_dup
+   'boolean_depth
+   'boolean_empty?
    'string_=
    'string_take
    'string_drop
@@ -31,9 +37,20 @@
    'string_concat
    'string_length
    'string_includes?
+   'string_depth
+   'string_empty?
+   'string_dup
    'close
    0
    1
+   2
+   3
+   4
+   5
+   6
+   7
+   8
+   9
    true
    false
    ""
@@ -149,7 +166,8 @@
   (make-push-instruction state
                          (fn [int1 int2]
                            (if (zero? int2)
-                             int1
+                             ; Nic prefers 1 to x here, but could be wrong.
+                             1 ; int1
                              (quot int1 int2)))
                          [:integer :integer]
                          :integer))
@@ -158,11 +176,32 @@
   [state]
   (make-push-instruction state = [:integer :integer] :boolean))
 
-(defn exec_dup
-  [state]
-  (if (empty-stack? state :exec)
+(defn stack-dup
+  [stack state]
+  (if (empty-stack? state stack)
     state
-    (push-to-stack state :exec (first (:exec state)))))
+    (push-to-stack state stack (first (get state stack)))))
+
+(def integer_dup (partial stack-dup :integer))
+(def boolean_dup (partial stack-dup :boolean))
+(def string_dup (partial stack-dup :string))
+(def exec_dup (partial stack-dup :exec))
+
+(defn stack-depth
+  [stack state]
+  (push-to-stack state :integer (count (get state stack))))
+
+(def integer_depth (partial stack-depth :integer))
+(def boolean_depth (partial stack-depth :boolean))
+(def string_depth (partial stack-depth :string))
+
+(defn stack-empty?
+  [stack state]
+  (push-to-stack state :boolean (empty? (get state stack))))
+
+(def integer_empty? (partial stack-empty? :integer))
+(def boolean_empty? (partial stack-empty? :boolean))
+(def string_empty? (partial stack-empty? :string))
 
 (defn exec_if
   [state]
