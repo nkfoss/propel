@@ -17,48 +17,54 @@
    'integer_-
    'integer_*
    'integer_%
+   'integer_mod
+   ; 'integer_divisible_by ; Do we want this?
    'integer_=
-   'integer_dup
-   'integer_depth
-   'integer_empty?
+   'integer_zero?
+   'integer_to_string
+  ;  'integer_dup
+  ;  'integer_empty?
+  ;  'integer_depth
    'exec_dup
    'exec_if
    'boolean_and
    'boolean_or
    'boolean_not
    'boolean_=
-   'boolean_dup
-   'boolean_depth
-   'boolean_empty?
-   'string_=
-   'string_take
-   'string_drop
-   'string_reverse
+  ;  'boolean_dup
+  ;  'boolean_depth
+  ;  'boolean_empty?
+  ;  'string_=
+  ;  'string_take
+  ;  'string_drop
+  ;  'string_reverse
    'string_concat
-   'string_length
-   'string_includes?
-   'string_depth
-   'string_empty?
-   'string_dup
+  ;  'string_length
+  ;  'string_includes?
+  ;  'string_depth
+  ;  'string_empty?
+  ;  'string_dup
    'close
    0
-   1
-   2
    3
-   4
    5
-   6
-   7
-   8
-   9
+   15 ; Do we provide this?
+  ;  0
+  ;  1
+  ;  2
+  ;  3
+  ;  4
+  ;  5
+  ;  6
+  ;  7
+  ;  8
+  ;  9
    true
    false
-   ""
-   "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
-   "A"
-   "C"
-   "G"
-   "T"))
+   "Fizz"
+   "Buzz"
+  ;  "FizzBuzz" ; Do we want this?
+   ))
 
 (def opens ; number of blocks opened by instructions (default = 0)
   {'exec_dup 1
@@ -468,12 +474,23 @@
      x
      3))
 
+(defn target-function-class
+  [x]
+  (+' (*' 7 x x x x x x x)
+      (*' 7 x x x x x x)
+      (*' (/ 7 2) x x x x x)
+      (*' (/ 7 3) x x x x)
+      (*' x x x)
+      (*' 3 x x)
+      (*' (/ 3 7) x)
+      49))
+
 (defn regression-error-function
   "Finds the behaviors and errors of the individual."
   [argmap individual]
   (let [program (push-from-plushy (:plushy individual))
         inputs (range -10 11)
-        correct-outputs (map target-function inputs)
+        correct-outputs (map target-function-hard inputs)
         outputs (map (fn [input]
                        (peek-stack
                         (interpret-program
@@ -551,3 +568,28 @@
                           [:error-function]
                           #(if (fn? %) % (eval %))))))
 
+
+; (string_length "T" boolean_= string_length boolean_= boolean_or 1 
+;                "" "ABCDEFGHIJKLMNOPQRSTUVWXYZ" boolean_or 
+;                exec_if 
+;                (exec_if 
+;                 ("C" integer_+ boolean_or in1 string_includes? 
+;                      exec_dup 
+;                      (string_concat 
+;                       exec_if 
+;                       ("ABCDEFGHIJKLMNOPQRSTUVWXYZ" 
+;                        string_includes? in1 integer_* 
+;                        "ABCDEFGHIJKLMNOPQRSTUVWXYZ" "C" 1 integer_+ 
+;                        boolean_or 
+;                        exec_if 
+;                        (integer_+ integer_+ exec_if () ()) 
+;                        ()) 
+;                       ())) 
+;                 ()) 
+;                ())
+
+; (5 exec_dup 
+;    (integer_= 5 integer_* 8 2 integer_- integer_= 
+;               integer_- integer_= 
+;               3 1 in1 in1 integer_* integer_+ 
+;               in1 integer_* integer_+))
