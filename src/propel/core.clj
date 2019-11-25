@@ -18,7 +18,10 @@
    'integer_*
    'integer_%
    'integer_mod
-   ; 'integer_divisible_by ; Do we want this?
+   ; Do we want this? Nic votes against because it seems to provide *too*
+   ; much help on the problem, and isn't something that's available in most
+   ; programming languages.
+   ; 'integer_divisible_by
    'integer_=
    'integer_zero?
    'integer_to_string
@@ -48,22 +51,18 @@
    0
    3
    5
-   15 ; Do we provide this?
-  ;  0
-  ;  1
-  ;  2
-  ;  3
-  ;  4
-  ;  5
-  ;  6
-  ;  7
-  ;  8
-  ;  9
+  ; I (Nic) didn't include this. Some problem descriptions include 15,
+  ; where others use language like "both" instead. I figure I'll
+  ; start with the harder version.
+  ; 15
    true
    false
    "Fizz"
    "Buzz"
-  ;  "FizzBuzz" ; Do we want this?
+  ; I (Nic) think there are good arguments for including this (it seems to
+  ; be explicitly included in many problem statements), but I think
+  ; the problem is more interesting/impressive without it.
+  ; "FizzBuzz"
    ))
 
 (def opens ; number of blocks opened by instructions (default = 0)
@@ -181,6 +180,25 @@
 (defn integer_=
   [state]
   (make-push-instruction state = [:integer :integer] :boolean))
+
+(defn integer_zero?
+  [state]
+  (make-push-instruction state zero? [:integer] :boolean))
+
+(defn integer_mod
+  [state]
+  (make-push-instruction 
+   state 
+   (fn [num den]
+     (if (zero? den)
+       1
+       (mod num den))) 
+   [:integer :integer] 
+   :integer))
+
+(defn integer_to_string
+  [state]
+  (make-push-instruction state str [:integer] :string))
 
 (defn stack-dup
   [stack state]
