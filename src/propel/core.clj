@@ -501,7 +501,7 @@
                      inputs)
         errors (map (fn [correct-output output]
                       (if (= output :no-stack-item)
-                        1000000
+                        1000000000
                         (abs (-' correct-output output))))
                     correct-outputs
                     outputs)]
@@ -567,29 +567,3 @@
                                         (map read-string args)))
                           [:error-function]
                           #(if (fn? %) % (eval %))))))
-
-
-; (string_length "T" boolean_= string_length boolean_= boolean_or 1 
-;                "" "ABCDEFGHIJKLMNOPQRSTUVWXYZ" boolean_or 
-;                exec_if 
-;                (exec_if 
-;                 ("C" integer_+ boolean_or in1 string_includes? 
-;                      exec_dup 
-;                      (string_concat 
-;                       exec_if 
-;                       ("ABCDEFGHIJKLMNOPQRSTUVWXYZ" 
-;                        string_includes? in1 integer_* 
-;                        "ABCDEFGHIJKLMNOPQRSTUVWXYZ" "C" 1 integer_+ 
-;                        boolean_or 
-;                        exec_if 
-;                        (integer_+ integer_+ exec_if () ()) 
-;                        ()) 
-;                       ())) 
-;                 ()) 
-;                ())
-
-; (5 exec_dup 
-;    (integer_= 5 integer_* 8 2 integer_- integer_= 
-;               integer_- integer_= 
-;               3 1 in1 in1 integer_* integer_+ 
-;               in1 integer_* integer_+))
