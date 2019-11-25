@@ -528,16 +528,79 @@
            :errors errors
            :total-error (apply +' errors))))
 
+;;;;;;;;;;;;;;;;;;;;;;;
+;; Fizz-Buzz fitness
+
 (defn to-fizz-buzz
   [n]
   (cond
     (zero? (rem n 15)) "FizzBuzz"
     (zero? (rem n 3)) "Fizz"
     (zero? (rem n 5)) "Buzz"
-    :else n))
+    :else (str n)))
 
 (def fizz-buzz-training
   (map to-fizz-buzz (range 100)))
+
+(defn num-extra-chars 
+  [max-error correct-output actual-output]
+  (min max-error
+       (- (count actual-output) (count correct-output))))
+
+; The error we'll return if the program doesn't return a
+; string that at least contains the desired output as a
+; substring. 
+(def fizz-buzz-failure-error 100)
+
+(defn fizzbuzz-case-error
+  [actual-output]
+  (cond
+    (every? #(clojure.string/includes? actual-output %) ["Fizz" "Buzz"])
+    (+ 10 (num-extra-chars 5 "FizzBuzz" actual-output))
+    (some #(clojure.string/includes? actual-output %) ["Fizz" "Buzz"])
+    (+ 20 (num-extra-chars 10 "FizzBuzz" actual-output))
+    :else fizz-buzz-failure-error))
+
+(defn fizz-buzz-error-jackson
+  "Given the correct output and the actual output, returns an error
+   value"
+  [correct-output actual-output]
+  (cond
+    ; If there is nothing on the string stack return a substantial penalty.
+    (= actual-output :no-stack-item) (* 10 fizz-buzz-failure-error)
+    ; If the actual output contains the expected output, the error
+    ; is the number of extra characters, capped at 20.
+    (clojure.string/includes? actual-output correct-output) 
+    (num-extra-chars 20 correct-output actual-output)
+    ; If the target output is "FizzBuzz" we'll handle that
+    ; separately.
+    (= correct-output "FizzBuzz") (fizzbuzz-case-error actual-output)
+    ; Otherwise we didn't output anything containing the target
+    ; output, so we'll return fizz-buzz-failure-error.
+    :else fizz-buzz-failure-error))
+
+(defn fizz-buzz-error-function
+  "Finds the behaviors and errors of a given individual on
+   the FizzBuzz problem"
+  [argmap individual]
+  (let [program (push-from-plushy (:plushy individual))
+        inputs (range 100)
+        correct-outputs fizz-buzz-training
+        outputs (map (fn [input]
+                       (peek-stack
+                        (interpret-program
+                         program
+                         (assoc empty-push-state :input {:in1 input})
+                         (:step-limit argmap))
+                        :string))
+                     inputs)
+        errors (map fizz-buzz-error-jackson
+                    correct-outputs
+                    outputs)]
+    (assoc individual
+           :behaviors outputs
+           :errors errors
+           :total-error (apply +' errors))))
 
 ;;;;;;;;;
 ;; String classification
