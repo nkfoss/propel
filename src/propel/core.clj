@@ -1,3 +1,6 @@
+;;(use 'propel.core)
+;;(-main)
+
 (ns propel.core
   (:gen-class))
 
