@@ -67,3 +67,14 @@
       (let [result (apply function (:args args-pop-result))
             new-state (:state args-pop-result)]
         (push-to-stack new-state return-stack result)))))
+
+
+(defn stack-ref
+  "Returns the indicated item of the type stack in state. Returns :no-stack-item if called
+   on an empty stack. This is a utility, not for use as an instruction in Push programs.
+   NOT SAFE for invalid positions."
+  [type position state]
+  (let [stack (type state)]
+    (if (empty? stack)
+      :no-stack-item
+      (nth stack position))))

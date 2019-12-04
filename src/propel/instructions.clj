@@ -101,3 +101,26 @@
 (defn string_includes?
   [state]
   (utl/make-push-instruction state clojure.string/includes? [:string :string] :boolean))
+
+
+
+
+; (defn string_removechar ; In top string on stack, remove all occurences of char
+;   ^{:stack-types [:string :char]}
+;   (fn [state]
+;     (if (and (not (empty? (:string state)))
+;              (not (empty? (:char state))))
+;       (let [result (apply str (remove #{(stack-ref :char 0 state)}
+;                                       (stack-ref :string 0 state)))]
+;         (push-item result
+;                    :string
+;                    (pop-item :char (pop-item :string state))))
+;       state)))
+
+(defn string_removechar 
+  [state]
+  (utl/make-push-instructions state
+                              #(apply str (remove #{%1} %2))
+                              [:char :string]              
+                              :string
+                              ))

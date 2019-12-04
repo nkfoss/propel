@@ -6,11 +6,6 @@
 (def default-instructions
   (list
    'in1
-   'integer_+
-   'integer_-
-   'integer_*
-   'integer_%
-   'integer_=
    'exec_dup
    'exec_if
    'boolean_and
@@ -24,6 +19,7 @@
    'string_concat
    'string_length
    'string_includes?
+   'string_removechar
    'close
    0
    1
@@ -34,4 +30,5 @@
    "A"
    "C"
    "G"
-   "T"))
+   "T"
+   ))
