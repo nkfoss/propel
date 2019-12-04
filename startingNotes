@@ -14,7 +14,7 @@ in1
 
 Fitness fxn:
 - Removes no vowels (BIG ERROR)
-- Removes some voewls (less error) (ratio? something else?)
+- Removes some vowels (less error) (ratio? something else?)
 - Removes all vowels (no error, unless removes consonants)
 
 - Look at the output, check the length. Return an abs val of the difference of the expected length, and return length. If not 0, penalize.
@@ -24,14 +24,31 @@ Fitness fxn:
 Requirements:
 - for the fitness fxn... we need a function that identifies consonants and vowels 
 	(if this is required for fitness eval)
-- 
+
+- do we want to let the program evolve a way to remove the vowels manually? 
+	(it seems that including a function that does that would be pointless...
+	even if the function only removed all a's or all e's...)
+
+- without a direct function, the program will need to know the indices of 
+	the vowels. This means using Clojure's "index-of" function.
+		https://clojuredocs.org/clojure.string/index-of
+
+- Since index-of only returns the first index, it would be better to make
+	something the returns a sequence of indices of that vowel.
+	Check out the top answer from Brian Carper:
+		https://stackoverflow.com/questions/4830900/how-do-i-find-the-index-of-an-item-in-a-vector
 
 
 
+===================================
 
-Fibonacci (given a number 'n', return the nth fibonacci number)
+Other ideas...
 
-Summation (given an integer 'n', return sum(0,1,...n) )
+- Fibonacci (given a number 'n', return the nth fibonacci number)
+
+- Summation (given an integer 'n', return sum(0,1,...n) )
+
+
 
 
 We found it tedious to scroll through 500+ lines of code in propel.core, so propel.core was refactored into four different parts:
