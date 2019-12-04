@@ -1,3 +1,6 @@
+Date: Dec 3, 2019
+
+Ideas:
 Disemvowel (obviously....)
 
 inputs:
@@ -31,3 +34,5 @@ Fibonacci (given a number 'n', return the nth fibonacci number)
 Summation (given an integer 'n', return sum(0,1,...n) )
 
 
+We found it tedious to scroll through 500+ lines of code in propel.core, so propel.core was refactored into four different parts:
+	default instructions, utilities, instructions and interpreter.
