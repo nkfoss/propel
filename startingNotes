@@ -1,3 +1,6 @@
+Date: Dec 3, 2019
+
+Ideas:
 Disemvowel (obviously....)
 
 inputs:
@@ -48,3 +51,5 @@ Other ideas...
 
 
 
+We found it tedious to scroll through 500+ lines of code in propel.core, so propel.core was refactored into four different parts:
+	default instructions, utilities, instructions and interpreter.
