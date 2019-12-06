@@ -1,0 +1,22 @@
+
+
+----------------------------------------------------------------------
+
+12/6/19
+
+Decisions on training data...
+
+- Real-world words. (Not nonsense words like 'aaaaawwqer'.)
+- Real words that DONT contain vowels...?
+- Made a dictionary.txt example file
+
+TODO:
+
+- Create fitness function
+- Create training data
+
+Progress:
+
+- Created disemvowel function, put into Clojure instructions (bottom)
+- Wrote .txt file that will serve as input to the problem
+

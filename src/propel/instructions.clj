@@ -119,8 +119,18 @@
 
 (defn string_removechar 
   [state]
-  (utl/make-push-instructions state
+  (utl/make-push-instruction state
                               #(apply str (remove #{%1} %2))
                               [:char :string]              
                               :string
                               ))
+
+(defn disemvowel
+  [string]
+  (apply str
+         (remove #{\a \e \i \o \u \A \E \I \O \U}
+                 string)))
+
+
+
+  
