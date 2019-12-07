@@ -11,6 +11,7 @@ Progress (untested):
 - Acquired Levenshtein distance functions from Nic's announcement on Canvas 
     - These are inside core.clj 
     - "levenshtein-distance" AND "compute-next-row" fxns required
+    - source: https://github.com/lspector/Clojush/blob/7b24d9f8649361083baea5ed37095d63fa3b83a0/src/clojush/util.clj#L350
 - Create "dismevowel-error-function"
     - inputs are retrieved from txt using "slurp" fxn
     - correct-outputs are defined by "target-function" (dismevowel)
