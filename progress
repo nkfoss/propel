@@ -1,4 +1,23 @@
+12/6/19 (evening)
 
+Using the following function gets our inputs into a vector. 
+
+> (str/split (slurp "dictionary.txt") #"\n")
+
+This will be useful in our error function
+
+Progress (untested):
+- Set target function to be our disemvowel implentation
+- Acquired Levenshtein distance functions from Nic's announcement on Canvas 
+    - These are inside core.clj 
+    - "levenshtein-distance" AND "compute-next-row" fxns required
+- Create "dismevowel-error-function"
+    - inputs are retrieved from txt using "slurp" fxn
+    - correct-outputs are defined by "target-function" (dismevowel)
+
+TODO:
+- Work Levenshtein distance into error-function
+- Run the GP.
 
 ----------------------------------------------------------------------
 
@@ -14,6 +33,7 @@ TODO:
 
 - Create fitness function
 - Create training data
+- Get Levenshtein Distance implementation
 
 Progress:
 

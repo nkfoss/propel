@@ -160,6 +160,31 @@
            :errors errors
            :total-error (apply +' errors))))
 
+(defn disemvowel-error-function
+  "Finds the behaviors and errors of the individual."
+  [argmap individual]
+  (let [program (inter/push-from-plushy (:plushy individual))
+        inputs (range -10 11)
+        correct-outputs (map target-function inputs)
+        outputs (map (fn [input]
+                       (utl/peek-stack
+                        (inter/interpret-program
+                         program
+                         (assoc utl/empty-push-state :input {:in1 input})
+                         (:step-limit argmap))
+                        :integer))
+                     inputs)
+        errors (map (fn [correct-output output]
+                      (if (= output :no-stack-item)
+                        1000000
+                        (utl/abs (- correct-output output))))
+                    correct-outputs
+                    outputs)]
+    (assoc individual
+           :behaviors outputs
+           :errors errors
+           :total-error (apply +' errors))))
+
 
 (defn -main
   "Runs propel-gp, giving it a map of arguments."
