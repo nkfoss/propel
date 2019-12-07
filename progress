@@ -15,10 +15,11 @@ Progress (untested):
 - Create "dismevowel-error-function"
     - inputs are retrieved from txt using "slurp" fxn
     - correct-outputs are defined by "target-function" (dismevowel)
+    - Place levenshtein distance in error function
 
 TODO:
-- Work Levenshtein distance into error-function
-- Run the GP.
+- Add/remove instructions for our program
+- Run the GP...?
 
 ----------------------------------------------------------------------
 

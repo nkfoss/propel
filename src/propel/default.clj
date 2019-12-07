@@ -13,9 +13,6 @@
    'boolean_not
    'boolean_=
    'string_=
-   'string_take
-   'string_drop
-   'string_reverse
    'string_concat
    'string_length
    'string_includes?
@@ -25,10 +22,14 @@
    1
    true
    false
-   ""
-   "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
+   "a"
+   "e"
+   "i"
+   "o"
+   "u"
    "A"
-   "C"
-   "G"
-   "T"
+   "E"
+   "I"
+   "O"
+   "U"
    ))
