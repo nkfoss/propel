@@ -41,4 +41,7 @@ Progress:
 
 - Created disemvowel function, put into Clojure instructions (bottom)
 - Wrote .txt file that will serve as input to the problem
+- Fix error function to include string function
+- Move instruction from default.clj to core.clj
+- Need to figure out how to sue the individual characters in default_instructions
 

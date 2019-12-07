@@ -1,16 +1,167 @@
-;;(use 'propel.core)
+; (use 'propel.core)
 ;;(-main)
 
 (ns propel.core
-  (:require [propel.default :as default]
-            [propel.utilities :as utl]
-            [propel.interpreter :as inter]))
+  (:require [propel.utilities :as utl]
+            ;[propel.instructions :as inst]
+            [propel.interpreter :as inter]
+            [clojure.string :as str]))
 
-; Don't think we need gen class, but just commenting it out for now
-  ; (:gen-class))
+(def default-instructions
+  (list
+   'in1
+   'exec_dup
+   'exec_if
+  ;  'boolean_and
+  ;  'boolean_or
+  ;  'boolean_not
+  ;  'boolean_=
+   'string_=
+   'string_concat
+   'string_length
+   'string_removechar
+   'close
+   'string_removechar
+   0
+   1
+   true
+   false
+   "a"
+   "e"
+   "i"
+   "o"
+   "u"
+   "A"
+   "E"
+   "I"
+   "O"
+   "U"))
 
-;;;;;;;;;
-;; GP
+
+;; Instructions
+(defn in1
+  "Pushes the input labeled :in1 on the inputs map onto the :exec stack."
+  [state]
+  (utl/push-to-stack state :exec (:in1 (:input state))))
+
+(defn integer_+
+  [state]
+  (utl/make-push-instruction state +' [:integer :integer] :integer))
+
+(defn integer_-
+  [state]
+  (utl/make-push-instruction state -' [:integer :integer] :integer))
+
+(defn integer_*
+  [state]
+  (utl/make-push-instruction state *' [:integer :integer] :integer))
+
+(defn integer_%
+  [state]
+  (utl/make-push-instruction state
+                             (fn [int1 int2]
+                               (if (zero? int2)
+                                 int1
+                                 (quot int1 int2)))
+                             [:integer :integer]
+                             :integer))
+
+(defn integer_=
+  [state]
+  (utl/make-push-instruction state = [:integer :integer] :boolean))
+
+(defn exec_dup
+  [state]
+  (if (utl/empty-stack? state :exec)
+    state
+    (utl/push-to-stack state :exec (first (:exec state)))))
+
+(defn exec_if
+  [state]
+  (utl/make-push-instruction state
+                             #(if %1 %3 %2)
+                             [:boolean :exec :exec]
+                             :exec))
+
+(defn boolean_and
+  [state]
+  (utl/make-push-instruction state #(and %1 %2) [:boolean :boolean] :boolean))
+
+(defn boolean_or
+  [state]
+  (utl/make-push-instruction state #(or %1 %2) [:boolean :boolean] :boolean))
+
+(defn boolean_not
+  [state]
+  (utl/make-push-instruction state not [:boolean] :boolean))
+
+(defn boolean_=
+  [state]
+  (utl/make-push-instruction state = [:boolean :boolean] :boolean))
+
+(defn string_=
+  [state]
+  (utl/make-push-instruction state = [:string :string] :boolean))
+
+(defn string_take
+  [state]
+  (utl/make-push-instruction state
+                             #(apply str (take %1 %2))
+                             [:integer :string]
+                             :string))
+
+(defn string_drop
+  [state]
+  (utl/make-push-instruction state
+                             #(apply str (drop %1 %2))
+                             [:integer :string]
+                             :string))
+
+(defn string_reverse
+  [state]
+  (utl/make-push-instruction state
+                             #(apply str (reverse %))
+                             [:string]
+                             :string))
+
+(defn string_concat
+  [state]
+  (utl/make-push-instruction state
+                             #(apply str (concat %1 %2))
+                             [:string :string]
+                             :string))
+
+(defn string_length
+  [state]
+  (utl/make-push-instruction state count [:string] :integer))
+
+
+; (defn string_removechar ; In top string on stack, remove all occurences of char
+;   ^{:stack-types [:string :char]}
+;   (fn [state]
+;     (if (and (not (empty? (:string state)))
+;              (not (empty? (:char state))))
+;       (let [result (apply str (remove #{(stack-ref :char 0 state)}
+;                                       (stack-ref :string 0 state)))]
+;         (push-item result
+;                    :string
+;                    (pop-item :char (pop-item :string state))))
+;       state)))
+
+(defn string_removechar
+  [state]
+  (utl/make-push-instruction state
+                             #(apply str (remove #{%1} %2))
+                             [:char :string]
+                             :string))
+
+(defn disemvowel
+  [string]
+  (apply str
+         (remove #{\a \e \i \o \u \A \E \I \O \U}
+                 string)))
+
+
 (defn make-random-plushy
   "Creates and returns a new plushy."
   [instructions max-initial-plushy-size]
@@ -153,11 +304,12 @@
 (defn levenshtein-distance
   [a b & {p :predicate  :or {p =}}]
   (cond
+    (= b :no-stack-item) 100
     (empty? a) (count b)
     (empty? b) (count a)
     :else (peek
            (reduce
-             
+            
             (fn [prev-row current-element]
               (compute-next-row prev-row current-element b p))
             (range (inc (count b)))
@@ -200,7 +352,7 @@
                          program
                          (assoc utl/empty-push-state :input {:in1 input})
                          (:step-limit argmap))
-                        :integer))
+                        :string))
                      inputs)
         errors (map levenshtein-distance
                     correct-outputs
@@ -215,9 +367,9 @@
   "Runs propel-gp, giving it a map of arguments."
   [& args]
   (binding [*ns* (the-ns 'propel.core)]
-    (propel-gp (update-in (merge {:instructions default/default-instructions
+    (propel-gp (update-in (merge {:instructions default-instructions
                                   :error-function disemvowel-error-function
-                                  :max-generations 500
+                                  :max-generations 100
                                   :population-size 200
                                   :max-initial-plushy-size 50
                                   :step-limit 100
