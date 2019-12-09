@@ -11,31 +11,17 @@
   (list
    'in1
    'exec_dup
-   'exec_if
-  ;  'boolean_and
-  ;  'boolean_or
-  ;  'boolean_not
-  ;  'boolean_=
    'string_=
    'string_concat
    'string_length
-   'string_removechar
+   'string_removesubstring
    'close
-   'string_removechar
-   0
-   1
-   true
-   false
    "a"
    "e"
    "i"
    "o"
    "u"
-   "A"
-   "E"
-   "I"
-   "O"
-   "U"))
+))
 
 
 ;; Instructions
@@ -148,12 +134,19 @@
 ;                    (pop-item :char (pop-item :string state))))
 ;       state)))
 
-(defn string_removechar
+(defn string_removesubstring
   [state]
   (utl/make-push-instruction state
-                             #(apply str (remove #{%1} %2))
-                             [:char :string]
+                             #(apply str (str/replace %2 %1 ""))
+                             [:string :string]
                              :string))
+
+; (defn string_removechar
+;   [state]
+;   (utl/make-push-instruction state
+;                              #(apply str (remove #{%1} %2))
+;                              [:char :string]
+;                              :string))
 
 (defn disemvowel
   [string]

@@ -45,3 +45,37 @@ Progress:
 - Move instruction from default.clj to core.clj
 - Need to figure out how to sue the individual characters in default_instructions
 
+----------------------------------------------------------------------
+
+12/9/19
+
+Made a succesful implementation.
+HOW: Instead of trying to make a function to remove individual characters, it replaces strings with substrings that are missing a particular character.
+
+We used the following instructtions:
+
+(def default-instructions
+  (list, 'in1, 'exec_dup, 'exec_if, 'string_=, 'string_concat,'string_length,'string_removesubstring, 'close
+   0, 1, true, false, "a", "e", "i", "o", "u", "A", "E", "I", "O", "U"))
+
+-------------------------------------------------------
+               Report for Generation 24
+-------------------------------------------------------
+Best plushy: ("e" "i" close "u" exec_if "e" "o" "a" in1 string_removesubstring string_removesubstring string_removesubstring string_removesubstring string_removesubstring exec_if 0 1)
+Best program: ("e" "i" "u" exec_if "e" "o" "a" in1 string_removesubstring string_removesubstring string_removesubstring string_removesubstring string_removesubstring exec_if 0 1)
+Best total error: 0
+Best errors: (0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0)
+Best behaviors: (ppl bnn cbbg dnky ffctv flmflm grndstndng hll wrld dn jndc klngfrb lngtd mnnst nthrlnds rngtn prbllm qn rnchy sq t rnm v w xbx ys z)
+
+--------
+
+We then removed some instructions like exec_if and true/false 0/1 and upper cases vowels:
+
+(def default-instructions
+  (list, 'in1, 'exec_dup, 'string_=, 'string_concat,'string_length,'string_removesubstring, 'close
+   "a", "e", "i", "o", "u")
+
+Example runs (forgot to write generation #'s):
+
+("i" "i" "a" "i" "u" "u" in1 in1 "o" string_removesubstring string_removesubstring in1 string_length "e" "i" "a" "a" in1 string_removesubstring string_removesubstring string_removesubstring string_removesubstring string_removesubstring string_removesubstring)
+(string_concat "o" "u" "i" "a" "i" "u" string_= "e" in1 string_removesubstring string_removesubstring string_removesubstring string_removesubstring string_removesubstring exec_dup exec_dup string_= string_concat string_length string_concat "i" "a" string_concat string_length)
