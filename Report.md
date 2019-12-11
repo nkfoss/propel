@@ -1,12 +1,9 @@
 # Problem
-1. Why Disemvowel?
-    * Disemvowel was a common programming problem that we thought would be apporachable enough as AI novices. We had implimented disemvowel in both
-    C and Rust in Practicum, so we had already thought over manual solutions
-    in a couple different contexts. Naturally our next move was to apply AI
-    magic to the problem.
-2. Problem Description
+1. Problem Description
     * Disemvowel may sound like a medieval punishment, but it is actually just
     removing all of the vowels from a string of characters. `disemvowel("Ike")` would output `k`. `disemvowel("The quick brown fox jumps over the lazy dog")` would output `Th qck brwn fx jmps vr th lzy dg`.
+2. Why Disemvowel?
+    * Disemvowel was a common programming problem that we thought would be apporachable enough as AI novices. We had implimented disemvowel in both C and Rust in Practicum, so we had already thought over manual solutions in a couple different contexts. Naturally our next move was to apply AI magic to the problem.
 
 # Set-up
 1. Custom Functions (remove substring)
@@ -54,11 +51,64 @@
 
 # Results
 1. Copy/paste results 
-    * t
-2. Descripton of the program
-    * t
+    * Our set of instructions that the AI could take in and throw around is as follows:
+    ```
+    (def default-instructions
+    (list, 'in1, 'exec_dup, 'exec_if, 'string_=, 'string_concat,'string_length,'string_removesubstring, 'close, 0, 1, true, false, "a", "e", "i", "o", "u", "A", "E", "I", "O", "U"))
+    ```
+    * Notice that we have all vowels in both upper and lower case. We also have basic string operations. The most important one is `'string_removesubstring` as we described earlier. This series of commands yeiled one run in which it only took around 50 generations to solve the problem.
+
+    ```
+    -------------------------------------------------------
+               Report for Generation 63
+    -------------------------------------------------------
+    Best plushy: ("A" "a" "e" "o" "i" "u" in1 string_removesubstring string_removesubstring string_removesubstring string_removesubstring string_removesubstring)
+    Best program: ("A" "a" "e" "o" "i" "u" in1 string_removesubstring string_removesubstring string_removesubstring string_removesubstring string_removesubstring)
+    Best total error: 0
+    Best errors: (0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0)
+    Best behaviors: (ppl bnn cbbg dnky ffctv flmflm grndstndng hll wrld dn jndc klngfrb lngtd mnnst nthrlnds rngtn prbllm qn rnchy sq t rnm v w xbx ys z)
+
+    ```
+
+    Another run:
+
+    ```
+    -------------------------------------------------------
+               Report for Generation 45
+    -------------------------------------------------------
+    Best plushy: ("a" "U" "i" "A" "I" in1 string_concat string_concat string_length exec_if "A" string_concat string_length string_concat string_concat in1 "E" "u" "i" "O" "i" close "o" "u" "e" "a" in1 string_removesubstring string_removesubstring string_removesubstring string_removesubstring string_removesubstring)
+    Best program: ("a" "U" "i" "A" "I" in1 string_concat string_concat string_length exec_if "A" string_concat string_length string_concat string_concat in1 "E" "u" "i" "O" "i" "o" "u" "e" "a" in1 string_removesubstring string_removesubstring string_removesubstring string_removesubstring string_removesubstring)
+    Best total error: 0
+    Best errors: (0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0)
+    Best behaviors: (ppl bnn cbbg dnky ffctv flmflm grndstndng hll wrld dn jndc klngfrb lngtd mnnst nthrlnds rngtn prbllm qn rnchy sq t rnm v w xbx ys z)
+
+    ```
+
+    Once we took out some of the extra noise, the AI remarkably found a program within only 24 generations.
+
+    ```
+    -------------------------------------------------------
+               Report for Generation 24
+    -------------------------------------------------------
+    Best plushy: ("e" "i" close "u" exec_if "e" "o" "a" in1 string_removesubstring string_removesubstring string_removesubstring string_removesubstring string_removesubstring exec_if 0 1)
+    Best program: ("e" "i" "u" exec_if "e" "o" "a" in1 string_removesubstring string_removesubstring string_removesubstring string_removesubstring string_removesubstring exec_if 0 1)
+    Best total error: 0
+    Best errors: (0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0)
+    Best behaviors: (ppl bnn cbbg dnky ffctv flmflm grndstndng hll wrld dn jndc klngfrb lngtd mnnst nthrlnds rngtn prbllm qn rnchy sq t rnm v w xbx ys z)
+
+    ```
+
+    * Remarkably, you will notice that none of the boolean related operations were included in the final result. `'exec_if` and `0` and `1` are included in the final result but they are noise. We realized that just because we had left those things in, we didn't have to retain them. 
+
+   
 
 # Future Work & Tweaks
 1. Using a character stack
-    * t
+    * Our custom function for removing vowels actually targets substrings of the input, namely "a", "e", "i" ... etc. Notice that they are not represented as characters. To perform disemvowel proper, we would need to write our function to not only target characters, but also implement a character stack.
 2. For/while loop and using components of remove_substring
+    * Our solution was found very quickly. This can be attributed to our string_removesubstring function doing much of the work. To evolve solutions that are more interesting, we would need to break this function down into it's components, and implement some sort of loop (exec_while could be suitable).
+
+    * If we used a loop, we would need something to tell us when we are done looking through the string. A counter is something conventional. For example, if we used string_length and initiated a while where our count was less than string_length, we could pop a character off the stack, use exec_if (which we require boolean stack) to see if it's the vowel to be removed(if so, remove), and then use int_+ to increment the count. This would *presumably* be done with each vowel. 
+
+    * It's not guaranteed that the program would evolve exactly like this, but these instructions could useful if something *similar* is to be evolved. 
+

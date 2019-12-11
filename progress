@@ -58,6 +58,38 @@ We used the following instructtions:
   (list, 'in1, 'exec_dup, 'exec_if, 'string_=, 'string_concat,'string_length,'string_removesubstring, 'close
    0, 1, true, false, "a", "e", "i", "o", "u", "A", "E", "I", "O", "U"))
 
+Run:
+
+-------------------------------------------------------
+               Report for Generation 63
+-------------------------------------------------------
+Best plushy: ("A" "a" "e" "o" "i" "u" in1 string_removesubstring string_removesubstring string_removesubstring string_removesubstring string_removesubstring)
+Best program: ("A" "a" "e" "o" "i" "u" in1 string_removesubstring string_removesubstring string_removesubstring string_removesubstring string_removesubstring)
+Best total error: 0
+Best errors: (0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0)
+Best behaviors: (ppl bnn cbbg dnky ffctv flmflm grndstndng hll wrld dn jndc klngfrb lngtd mnnst nthrlnds rngtn prbllm qn rnchy sq t rnm v w xbx ys z)
+
+
+Another run:
+
+-------------------------------------------------------
+               Report for Generation 45
+-------------------------------------------------------
+Best plushy: ("a" "U" "i" "A" "I" in1 string_concat string_concat string_length exec_if "A" string_concat string_length string_concat string_concat in1 "E" "u" "i" "O" "i" close "o" "u" "e" "a" in1 string_removesubstring string_removesubstring string_removesubstring string_removesubstring string_removesubstring)
+Best program: ("a" "U" "i" "A" "I" in1 string_concat string_concat string_length exec_if "A" string_concat string_length string_concat string_concat in1 "E" "u" "i" "O" "i" "o" "u" "e" "a" in1 string_removesubstring string_removesubstring string_removesubstring string_removesubstring string_removesubstring)
+Best total error: 0
+Best errors: (0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0)
+Best behaviors: (ppl bnn cbbg dnky ffctv flmflm grndstndng hll wrld dn jndc klngfrb lngtd mnnst nthrlnds rngtn prbllm qn rnchy sq t rnm v w xbx ys z)
+
+
+
+
+We then removed some instructions like exec_if and true/false 0/1 and upper cases vowels:
+
+(def default-instructions
+  (list, 'in1, 'exec_dup, 'string_=, 'string_concat,'string_length,'string_removesubstring, 'close
+   "a", "e", "i", "o", "u")
+
 -------------------------------------------------------
                Report for Generation 24
 -------------------------------------------------------
@@ -67,13 +99,6 @@ Best total error: 0
 Best errors: (0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0)
 Best behaviors: (ppl bnn cbbg dnky ffctv flmflm grndstndng hll wrld dn jndc klngfrb lngtd mnnst nthrlnds rngtn prbllm qn rnchy sq t rnm v w xbx ys z)
 
---------
-
-We then removed some instructions like exec_if and true/false 0/1 and upper cases vowels:
-
-(def default-instructions
-  (list, 'in1, 'exec_dup, 'string_=, 'string_concat,'string_length,'string_removesubstring, 'close
-   "a", "e", "i", "o", "u")
 
 Example runs (forgot to write generation #'s):
 

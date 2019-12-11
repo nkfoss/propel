@@ -3,7 +3,6 @@
 
 (ns propel.core
   (:require [propel.utilities :as utl]
-            ;[propel.instructions :as inst]
             [propel.interpreter :as inter]
             [clojure.string :as str]))
 
@@ -11,17 +10,26 @@
   (list
    'in1
    'exec_dup
+   'exec_if
    'string_=
    'string_concat
    'string_length
    'string_removesubstring
    'close
+   0
+   1
+   true
+   false
    "a"
    "e"
    "i"
    "o"
    "u"
-))
+   "A"
+   "E"
+   "I"
+   "O"
+   "U"))
 
 
 ;; Instructions

@@ -1,11 +1,11 @@
 (ns propel.interpreter
   (:require [propel.utilities :as utl]
-            [propel.instructions :as inst]))
+            [propel.core :as core]))
 
 ;; Interpreter
 (def opens ; number of blocks opened by instructions (default = 0)
-  {inst/exec_dup 1
-   inst/exec_if 2})
+  {core/exec_dup 1
+   core/exec_if 2})
 
 (defn interpret-one-step
   "Takes a Push state and executes the next instruction on the exec stack."
