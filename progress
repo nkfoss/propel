@@ -1,3 +1,27 @@
+12/6/19
+
+Decisions on training data...
+
+- Real-world words. (Not nonsense words like 'aaaaawwqer'.)
+- Real words that DONT contain vowels...?
+- Made a dictionary.txt example file
+
+TODO:
+
+- Create fitness function
+- Create training data
+- Get Levenshtein Distance implementation
+
+Progress:
+
+- Created disemvowel function, put into Clojure instructions (bottom)
+- Wrote .txt file that will serve as input to the problem
+- Fix error function to include string function
+- Move instruction from default.clj to core.clj
+- Need to figure out how to sue the individual characters in default_instructions
+
+----------------------------------------------------------------------
+
 12/6/19 (evening)
 
 Using the following function gets our inputs into a vector. 
@@ -20,30 +44,6 @@ Progress (untested):
 TODO:
 - Add/remove instructions for our program
 - Run the GP...?
-
-----------------------------------------------------------------------
-
-12/6/19
-
-Decisions on training data...
-
-- Real-world words. (Not nonsense words like 'aaaaawwqer'.)
-- Real words that DONT contain vowels...?
-- Made a dictionary.txt example file
-
-TODO:
-
-- Create fitness function
-- Create training data
-- Get Levenshtein Distance implementation
-
-Progress:
-
-- Created disemvowel function, put into Clojure instructions (bottom)
-- Wrote .txt file that will serve as input to the problem
-- Fix error function to include string function
-- Move instruction from default.clj to core.clj
-- Need to figure out how to sue the individual characters in default_instructions
 
 ----------------------------------------------------------------------
 
