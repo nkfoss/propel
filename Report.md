@@ -3,7 +3,7 @@
     * Disemvowel may sound like a medieval punishment, but it is actually just
     removing all of the vowels from a string of characters. `disemvowel("Ike")` would output `k`. `disemvowel("The quick brown fox jumps over the lazy dog")` would output `Th qck brwn fx jmps vr th lzy dg`.
 2. Why Disemvowel?
-    * Disemvowel was a common programming problem that we thought would be apporachable enough as AI novices. We had implimented disemvowel in both C and Rust in Practicum, so we had already thought over manual solutions in a couple different contexts. Naturally our next move was to apply AI magic to the problem.
+    * Disemvowel was a common programming problem that we thought would be apporachable as AI novices. We had implimented disemvowel in both C and Rust in Practicum, so we had already thought over manual solutions in a couple different contexts. Naturally our next move was to apply AI magic to the problem.
 
 # Set-up
 1. Custom Functions (remove substring)
@@ -19,8 +19,7 @@
     * 
 
 2. Error Function
-    * For out error function we considered a few custom formulas. BLAH BLAH BLAH LIST THEM.
-    * In the end we decided that the Levenshtein Distance error function would be optimal for us. We borrowed the distance function wholesale from Lee Spector's Clojush repository. 
+    * For our error function we considered a few custom formulas... but we ultimately decided that the Levenshtein Distance would be optimal. We borrowed the distance function from Lee Spector's Clojush repository. 
     ``` clojure
     (defn levenshtein-distance
     [a b & {p :predicate  :or {p =}}]
@@ -37,8 +36,8 @@
                 a))))
     ```
 3. The actual disemvowel function
-    * We had to impliment a straightforward, non-AI based disemvowel function to be able
-    to build out test cases. An input string has each of it's vowels in either case removed,
+    * We had to implement a straightforward, non-AI based disemvowel function to be able
+    to build out test cases. An input string has each of its vowels removed,
     over and over. 
     ``` clojure
     (defn target-function
@@ -47,16 +46,24 @@
             (remove #{\a \e \i \o \u \A \E \I \O \U} string)))
     ```
 4. How we defined inputs
-    * We created a `dictionary.txt` containing one word for each letter of the alphabet as the starting letter of a word. We tried to put in some short words and long words and some in between. Regardless of the word, we tried to have some with a few vowels and many vowels. Our `disemvowel-error-function` would receive the dictionary files for input and apply the manual implementation of disemvowel to each word, each word sitting on its own line. The dictionary was split up by newline characters, with the final product being a vector of individual words. The output of each disemvoweled word is what the error function compares the output of our AI with.  
+    * We created a `dictionary.txt` containing one word for each letter of the alphabet as the starting letter of a word. We tried to put in some short words, long words, and some in between. Regardless of the word, we tried to have some with a few vowels and many vowels. Our `disemvowel-error-function` would receive the dictionary files for input and apply the manual implementation of disemvowel to each word, each word sitting on its own line. Clojure's 'slurp' function was handy.
+
+    ``` clojure
+    (let [program (inter/push-from-plushy (:plushy individual))
+        inputs (str/split (slurp "dictionary.txt") #"\n") ;; Get from a text file
+    ```
+
+    The dictionary was split up by newline characters, with the final product being a vector of individual words. The output of each disemvoweled word is what the error function compares the output of our AI with.  
 
 # Results
 1. Copy/paste results 
     * Our set of instructions that the AI could take in and throw around is as follows:
-    ```
+
+    ``` clojure
     (def default-instructions
     (list, 'in1, 'exec_dup, 'exec_if, 'string_=, 'string_concat,'string_length,'string_removesubstring, 'close, 0, 1, true, false, "a", "e", "i", "o", "u", "A", "E", "I", "O", "U"))
     ```
-    * Notice that we have all vowels in both upper and lower case. We also have basic string operations. The most important one is `'string_removesubstring` as we described earlier. This series of commands yeiled one run in which it only took around 50 generations to solve the problem.
+    * Notice that we have all vowels in both upper and lower case. We also have basic string operations. The most important one is `'string_removesubstring` as we described earlier. This series of commands yielded one run in which it only took around 50 generations to solve the problem.
 
     ```
     -------------------------------------------------------
@@ -103,12 +110,14 @@
    
 
 # Future Work & Tweaks
+
 1. Using a character stack
     * Our custom function for removing vowels actually targets substrings of the input, namely "a", "e", "i" ... etc. Notice that they are not represented as characters. To perform disemvowel proper, we would need to write our function to not only target characters, but also implement a character stack.
+
 2. For/while loop and using components of remove_substring
     * Our solution was found very quickly. This can be attributed to our string_removesubstring function doing much of the work. To evolve solutions that are more interesting, we would need to break this function down into it's components, and implement some sort of loop (exec_while could be suitable).
 
-    * If we used a loop, we would need something to tell us when we are done looking through the string. A counter is something conventional. For example, if we used string_length and initiated a while where our count was less than string_length, we could pop a character off the stack, use exec_if (which we require boolean stack) to see if it's the vowel to be removed(if so, remove), and then use int_+ to increment the count. This would *presumably* be done with each vowel. 
+    * If we used a loop, we would need something to tell us when we are done iterating over the string. A counter is conventional. For example, if we used string_length and initiated a while-loop where as long as the count was less than string_length, we could pop a character off the stack, use exec_if (which we require boolean stack) to see if it's the vowel to be removed (if so, remove), and then use int_+ to increment the count. This would *presumably* be done with each vowel. 
 
-    * It's not guaranteed that the program would evolve exactly like this, but these instructions could useful if something *similar* is to be evolved. 
+    * It's not guaranteed that the program would evolve exactly like this, but these instructions could useful if something *similar* is to be evolved. The main point is that evolution needs a more diverse set of instructions to involve something beyond our easy solution.
 
